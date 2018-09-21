@@ -1,21 +1,24 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
+import React, {Component} from 'react';
 import './App.css';
 
+import CustomMap from './components/CustomMap.js'
+import PlacesList from './components/PlacesList.js'
+
 class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
-      </div>
-    );
-  }
+    render() {
+        return (
+            <div className="App">
+                <PlacesList/>
+                <CustomMap
+                    isMarkerShown={true}
+                    googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyCGekEiZ6lE1XN9rQrmIAqbnN-pF7xMX60&v=3.exp&libraries=geometry,drawing,places"
+                    loadingElement={<div style={{height: `100%`}}/>}
+                    containerElement={<div style={{height: `400px`}}/>}
+                    mapElement={<div style={{height: `100%`}}/>}
+                />
+            </div>
+        );
+    }
 }
 
 export default App;
