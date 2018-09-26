@@ -22,16 +22,12 @@ const Wrapper = styled.div`
 const CustomMarker = props => (
     <Wrapper
         alt={props.text}
-        {...props.onClick ? { onClick: props.onClick } : {}}
+        {...props}
     />
 );
 
-CustomMarker.defaultProps = {
-    onClick: null,
-};
-
 CustomMarker.propTypes = {
-    onClick: PropTypes.func,//FIXME
+    onClick: PropTypes.func.isRequired,
     text: PropTypes.string.isRequired,
 };
 
