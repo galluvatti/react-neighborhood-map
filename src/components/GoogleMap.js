@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import PointsOfInterestList from "./PointsOfInterestList.js";
 
 const clientId = "LWNZFPLXZW2GHQ1N1ZC5CTWTEJZZDR0JCTTQIBCAT2UIEBQS";
 const clientSecret = "4FZVE0ZCVFNDTE3ME5PHTFEQWU4PJRQC4UL0ONX5GQA2CVCQ";
@@ -57,7 +58,8 @@ class GoogleMap extends Component {
         mapView.style.width = window.innerWidth + "px";
         const map = new window.google.maps.Map(mapView, {
             zoom: 16,
-            center: {lat: 45.4640976, lng: 9.1919265}
+            center: {lat: 45.4640976, lng: 9.1919265},
+            mapTypeControl: false
         });
         this.setState({map: map});
         const markers = [];
@@ -91,7 +93,7 @@ class GoogleMap extends Component {
     populateInfoWindow = (marker) => {
         this.setState((prevState) => {
             const infoWindow = prevState.infoWindow;
-            if(infoWindow.marker != null)
+            if (infoWindow.marker != null)
                 infoWindow.marker.setAnimation(null)
             infoWindow.marker = marker;
             return {infoWindow: infoWindow};
@@ -149,7 +151,10 @@ class GoogleMap extends Component {
 
     render() {
         return (
-            <div id='map'></div>
+            <div>
+                <PointsOfInterestList list={this.state.pointsOfInterest}/>
+                <div id='map'/>
+            </div>
         )
     }
 }
