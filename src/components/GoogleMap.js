@@ -1,5 +1,8 @@
 import React, {Component} from 'react';
 
+var clientId = "LWNZFPLXZW2GHQ1N1ZC5CTWTEJZZDR0JCTTQIBCAT2UIEBQS";
+var clientSecret = "4FZVE0ZCVFNDTE3ME5PHTFEQWU4PJRQC4UL0ONX5GQA2CVCQ";
+
 class GoogleMap extends Component {
 
     constructor(props) {
@@ -45,7 +48,7 @@ class GoogleMap extends Component {
     }
 
     loadMap() {
-        var mapView = document.getElementById('map');
+        const mapView = document.getElementById('map');
         mapView.style.height = window.innerHeight + "px";
         mapView.style.width = window.innerWidth + "px";
         const map = new window.google.maps.Map(mapView, {
@@ -58,11 +61,15 @@ class GoogleMap extends Component {
             const marker = new window.google.maps.Marker({
                 position: {lat: point.lat, lng: point.lng},
                 map: map,
-                title: point.title,
-                animation: window.google.maps.Animation.DROP
+                title: point.title
             });
-            var largeInfowindow = new window.google.maps.InfoWindow();
-            this.setState({infoWindow: largeInfowindow})
+            var infoWindow = new window.google.maps.InfoWindow();
+            infoWindow.addListener('closeclick', function () {
+                infoWindow.marker.setAnimation(null)
+                infoWindow.marker = null;
+            });
+
+            this.setState({infoWindow: infoWindow})
             marker.addListener('click', function () {
                 window.populateInfoWindow(this);
             });
@@ -72,12 +79,14 @@ class GoogleMap extends Component {
     }
 
     populateInfoWindow = (marker) => {
-        this.state.infoWindow.marker = marker;
+        this.setState((prevState)=> {
+            const infoWindow = prevState.infoWindow;
+            infoWindow.marker = marker;
+            return {infoWindow: infoWindow};
+        })
 
-        // this.openInfoWindow('Pippo');
-        var clientId = "LWNZFPLXZW2GHQ1N1ZC5CTWTEJZZDR0JCTTQIBCAT2UIEBQS";
-        var clientSecret = "4FZVE0ZCVFNDTE3ME5PHTFEQWU4PJRQC4UL0ONX5GQA2CVCQ";
-        var url = "https://api.foursquare.com/v2/venues/search?client_id=" + clientId + "&client_secret=" + clientSecret + "&v=20130815&ll=" + marker.position.lat() + "," + marker.position.lng() + "&limit=1";
+
+        const url = "https://api.foursquare.com/v2/venues/search?client_id=" + clientId + "&client_secret=" + clientSecret + "&v=20130815&ll=" + marker.position.lat() + "," + marker.position.lng() + "&limit=1";
         fetch(url)
             .then(
                 function (response) {
@@ -88,7 +97,6 @@ class GoogleMap extends Component {
 
                     // Examine the text in the response
                     response.json().then(function (data) {
-                        console.log(data)
                         const venue = data.response.venues[0];
                         const checkins = '<b>Users who checked in: </b>' + venue.stats.checkinsCount + '<br>';
                         const fourSquareUrl = '<a href="https://foursquare.com/v/' + venue.id + '" target="_blank">Go to FourSquare site</a>'
@@ -105,6 +113,7 @@ class GoogleMap extends Component {
     openInfoWindow(content) {
         this.state.infoWindow.setContent(content)
         this.state.infoWindow.open(this.state.map, this.state.infoWindow.marker)
+        this.state.infoWindow.marker.setAnimation(window.google.maps.Animation.BOUNCE)
     }
 
     componentDidMount() {
@@ -112,7 +121,7 @@ class GoogleMap extends Component {
         window.loadMap = this.loadMap;
         window.populateInfoWindow = this.populateInfoWindow;
         window.openInfoWindow = this.openInfoWindow;
-        var script = document.createElement("script");
+        const script = document.createElement("script");
         script.src = "https://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyCGekEiZ6lE1XN9rQrmIAqbnN-pF7xMX60&callback=loadMap";
         script.async = true;
         script.defer = true;
