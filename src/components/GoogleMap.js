@@ -69,8 +69,8 @@ class GoogleMap extends Component {
         window.loadMap = this.loadMap;
         var script = document.createElement("script");
         script.src = "https://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyCGekEiZ6lE1XN9rQrmIAqbnN-pF7xMX60&callback=loadMap";
-        script.defer = true;
         script.async = true;
+        script.defer = true;
         document.body.appendChild(script);
         console.log('Script Loaded')
     }
