@@ -53,7 +53,7 @@ class App extends Component {
         this.setState({map})
     }
 
-    showInfoWindow = (event, marker) => {
+    showInfoWindow = (marker) => {
         console.log(marker.title)
         var clientId = "LWNZFPLXZW2GHQ1N1ZC5CTWTEJZZDR0JCTTQIBCAT2UIEBQS";
         var clientSecret = "4FZVE0ZCVFNDTE3ME5PHTFEQWU4PJRQC4UL0ONX5GQA2CVCQ";
