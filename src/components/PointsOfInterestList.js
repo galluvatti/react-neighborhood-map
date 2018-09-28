@@ -9,12 +9,16 @@ class PointsOfInterestList extends Component {
         query: ''
     }
 
+    /**
+     * Update the query value used to filter markers
+     * @param query
+     */
     updateQuery = (query) => {
-        this.setState({ query: query.trim() })
+        this.setState({query: query.trim()})
     }
 
     render() {
-        const {list, populateInfoWindow} = this.props;
+        const {list, populateInfoWindow, closeInfoWindow} = this.props;
         const {query} = this.state;
         let showingPlaces
         if (query) {
@@ -25,8 +29,15 @@ class PointsOfInterestList extends Component {
         }
         showingPlaces.sort(sortBy('title'))
         list.forEach((marker) => {
-            showingPlaces.includes(marker)? marker.setVisible(true) : marker.setVisible(false);
+            if (showingPlaces.includes(marker)) {
+                marker.setVisible(true)
+            }
+            else {
+                marker.setVisible(false);
+                closeInfoWindow(marker);
+            }
         })
+
         return (
             <div className="search-box">
                 <input
@@ -40,10 +51,10 @@ class PointsOfInterestList extends Component {
                     {showingPlaces.map((marker) => (
                         <li
                             key={marker.title}
-                            onClick={()=>populateInfoWindow(marker)}
+                            onClick={() => populateInfoWindow(marker)}
                         >
                             {marker.title}
-                            </li>
+                        </li>
                     ))}
                 </ul>
             </div>
@@ -52,7 +63,8 @@ class PointsOfInterestList extends Component {
 
     static propTypes = {
         list: PropTypes.array.isRequired,
-        populateInfoWindow: PropTypes.func.isRequired
+        populateInfoWindow: PropTypes.func.isRequired,
+        closeInfoWindow: PropTypes.func.isRequired
     }
 }
 
