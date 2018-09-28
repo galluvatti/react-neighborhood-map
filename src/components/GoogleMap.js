@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 
-var clientId = "LWNZFPLXZW2GHQ1N1ZC5CTWTEJZZDR0JCTTQIBCAT2UIEBQS";
-var clientSecret = "4FZVE0ZCVFNDTE3ME5PHTFEQWU4PJRQC4UL0ONX5GQA2CVCQ";
+const clientId = "LWNZFPLXZW2GHQ1N1ZC5CTWTEJZZDR0JCTTQIBCAT2UIEBQS";
+const clientSecret = "4FZVE0ZCVFNDTE3ME5PHTFEQWU4PJRQC4UL0ONX5GQA2CVCQ";
 
 class GoogleMap extends Component {
 
@@ -47,6 +47,10 @@ class GoogleMap extends Component {
         this.openInfoWindow = this.openInfoWindow.bind(this);
     }
 
+    /**
+     * Initializes the google map so that it fits the entire available space
+     * Also initializes the locations
+     */
     loadMap() {
         const mapView = document.getElementById('map');
         mapView.style.height = window.innerHeight + "px";
@@ -63,7 +67,7 @@ class GoogleMap extends Component {
                 map: map,
                 title: point.title
             });
-            var infoWindow = new window.google.maps.InfoWindow();
+            const infoWindow = new window.google.maps.InfoWindow();
             infoWindow.addListener('closeclick', function () {
                 infoWindow.marker.setAnimation(null)
                 infoWindow.marker = null;
@@ -78,13 +82,20 @@ class GoogleMap extends Component {
         this.setState({markers: markers});
     }
 
+    /**
+     * Call FourSquare API to retrieve venue info about the selected marker
+     * Link to FourSquare API
+     * https://foursquare.com/developers
+     * @param marker
+     */
     populateInfoWindow = (marker) => {
-        this.setState((prevState)=> {
+        this.setState((prevState) => {
             const infoWindow = prevState.infoWindow;
+            if(infoWindow.marker != null)
+                infoWindow.marker.setAnimation(null)
             infoWindow.marker = marker;
             return {infoWindow: infoWindow};
         })
-
 
         const url = "https://api.foursquare.com/v2/venues/search?client_id=" + clientId + "&client_secret=" + clientSecret + "&v=20130815&ll=" + marker.position.lat() + "," + marker.position.lng() + "&limit=1";
         fetch(url)
@@ -98,10 +109,10 @@ class GoogleMap extends Component {
                     // Examine the text in the response
                     response.json().then(function (data) {
                         const venue = data.response.venues[0];
-                        const checkins = '<b>Users who checked in: </b>' + venue.stats.checkinsCount + '<br>';
+                        const usersCheckedIn = '<b>Users who checked in: </b>' + venue.stats.checkinsCount + '<br>';
                         const fourSquareUrl = '<a href="https://foursquare.com/v/' + venue.id + '" target="_blank">Go to FourSquare site</a>'
 
-                        window.openInfoWindow(checkins + fourSquareUrl)
+                        window.openInfoWindow(usersCheckedIn + fourSquareUrl)
                     });
                 }
             )
@@ -110,12 +121,20 @@ class GoogleMap extends Component {
             });
     }
 
+    /**
+     * Open the info window with the selected content
+     * @param content
+     */
     openInfoWindow(content) {
         this.state.infoWindow.setContent(content)
         this.state.infoWindow.open(this.state.map, this.state.infoWindow.marker)
         this.state.infoWindow.marker.setAnimation(window.google.maps.Animation.BOUNCE)
     }
 
+    /**
+     * Load the Google API Js
+     * Info at https://developers.google.com/maps/documentation
+     */
     componentDidMount() {
         //Loads Google Maps API
         window.loadMap = this.loadMap;
