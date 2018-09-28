@@ -36,13 +36,14 @@ class GoogleMap extends Component {
                     lng: 9.191188
                 }
             ],
-            markers: []
+            markers: [],
+            infoWindow: ''
         }
         this.loadMap = this.loadMap.bind(this);
+        this.populateInfoWindow = this.populateInfoWindow.bind(this);
     }
 
     loadMap() {
-        console.log("Init Map")
         var mapView = document.getElementById('map');
         mapView.style.height = window.innerHeight + "px";
         mapView.style.width = window.innerWidth + "px";
@@ -56,27 +57,35 @@ class GoogleMap extends Component {
             const marker = new window.google.maps.Marker({
                 position: {lat: point.lat, lng: point.lng},
                 map: map,
-                title: point.title
+                title: point.title,
+                animation: window.google.maps.Animation.DROP
             });
-
+            var largeInfowindow = new window.google.maps.InfoWindow();
+            this.setState({infoWindow: largeInfowindow})
+            marker.addListener('click', function() {
+                window.populateInfoWindow(this);
+            });
             markers.push(marker);
         })
         this.setState({markers: markers});
     }
 
+    populateInfoWindow = (marker) => {
+
+    }
+
     componentDidMount() {
-        //Loading Google Maps API
+        //Loads Google Maps API
         window.loadMap = this.loadMap;
+        window.populateInfoWindow = this.populateInfoWindow;
         var script = document.createElement("script");
         script.src = "https://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyCGekEiZ6lE1XN9rQrmIAqbnN-pF7xMX60&callback=loadMap";
         script.async = true;
         script.defer = true;
         document.body.appendChild(script);
-        console.log('Script Loaded')
     }
 
     render() {
-        console.log('rendering component')
         return (
             <div id='map'></div>
         )
