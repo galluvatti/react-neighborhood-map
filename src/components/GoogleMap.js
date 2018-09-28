@@ -98,7 +98,6 @@ class GoogleMap extends Component {
             infoWindow.marker = marker;
             return {infoWindow: infoWindow};
         })
-
         const url = "https://api.foursquare.com/v2/venues/search?client_id=" + clientId + "&client_secret=" + clientSecret + "&v=20130815&ll=" + marker.position.lat() + "," + marker.position.lng() + "&limit=1";
         fetch(url)
             .then(
@@ -152,7 +151,7 @@ class GoogleMap extends Component {
     render() {
         return (
             <div>
-                <PointsOfInterestList list={this.state.pointsOfInterest}/>
+                <PointsOfInterestList list={this.state.markers} populateInfoWindow={this.populateInfoWindow}/>
                 <div id='map'/>
             </div>
         )

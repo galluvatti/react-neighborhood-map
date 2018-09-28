@@ -41,6 +41,7 @@ ul {
   border: 1px solid black;
   overflow: auto;
   list-style: none;
+  cursor: pointer;
 }
 
 @keyframes App-logo-spin {

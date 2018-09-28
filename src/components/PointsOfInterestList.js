@@ -6,22 +6,15 @@ import sortBy from 'sort-by'
 class PointsOfInterestList extends Component {
 
     state = {
-        query: '',
-        placesList: []
+        query: ''
     }
 
     updateQuery = (query) => {
         this.setState({ query: query.trim() })
     }
 
-    componentDidMount() {
-        // const places = [];
-        // this.props.list.forEach((p) => places.push(p));
-        // this.setState({placesList:places});
-    }
-
     render() {
-        const {list} = this.props;
+        const {list, populateInfoWindow} = this.props;
         const {query} = this.state;
         let showingPlaces
         if (query) {
@@ -31,6 +24,9 @@ class PointsOfInterestList extends Component {
             showingPlaces = list
         }
         showingPlaces.sort(sortBy('title'))
+        list.forEach((marker) => {
+            showingPlaces.includes(marker)? marker.setVisible(true) : marker.setVisible(false);
+        })
         return (
             <div className="search-box">
                 <input
@@ -41,8 +37,13 @@ class PointsOfInterestList extends Component {
                     onChange={(event) => this.updateQuery(event.target.value)}
                 ></input>
                 <ul>
-                    {showingPlaces.map((point) => (
-                        <li key={point.title}>{point.title}</li>
+                    {showingPlaces.map((marker) => (
+                        <li
+                            key={marker.title}
+                            onClick={()=>populateInfoWindow(marker)}
+                        >
+                            {marker.title}
+                            </li>
                     ))}
                 </ul>
             </div>
@@ -50,7 +51,8 @@ class PointsOfInterestList extends Component {
     }
 
     static propTypes = {
-        list: PropTypes.array.isRequired
+        list: PropTypes.array.isRequired,
+        populateInfoWindow: PropTypes.func.isRequired
     }
 }
 
