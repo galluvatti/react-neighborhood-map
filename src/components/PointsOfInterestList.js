@@ -39,8 +39,9 @@ class PointsOfInterestList extends Component {
         })
 
         return (
-            <div className="search-box">
+            <div className="search-box" role="search">
                 <input
+                    aria-label="search text"
                     tabIndex={1}
                     type="text"
                     className="search-text"
@@ -48,9 +49,10 @@ class PointsOfInterestList extends Component {
                     value={this.state.query}
                     onChange={(event) => this.updateQuery(event.target.value)}
                 ></input>
-                <ul>
+                <ul role="group">
                     {showingPlaces.map((marker) => (
                         <li
+                            role="button"
                             tabIndex={0}
                             key={marker.title}
                             onClick={() => populateInfoWindow(marker)}

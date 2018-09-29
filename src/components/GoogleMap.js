@@ -169,7 +169,7 @@ class GoogleMap extends Component {
         window.closeInfoWindow = this.closeInfoWindow();
         window.gm_authFailure = this.gm_authFailure;
         const script = document.createElement("script");
-        script.src = "https://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyCGekEiZ6lE1XN9rQrmIAqbnN-pF7xMX6&callback=loadMap";
+        script.src = "https://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyCGekEiZ6lE1XN9rQrmIAqbnN-pF7xMX60&callback=loadMap";
         script.async = true;
         script.defer = true;
         script.onerror = function () {
