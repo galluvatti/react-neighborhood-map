@@ -34,7 +34,7 @@ class PointsOfInterestList extends Component {
             }
             else {
                 marker.setVisible(false);
-                closeInfoWindow(marker);
+                closeInfoWindow();
             }
         })
 

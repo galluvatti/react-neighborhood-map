@@ -41,7 +41,8 @@ class GoogleMap extends Component {
                 }
             ],
             markers: [],
-            infoWindow: ''
+            infoWindow: '',
+            map:''
         }
 
         this.loadMap = this.loadMap.bind(this);
@@ -58,12 +59,13 @@ class GoogleMap extends Component {
         const mapView = document.getElementById('map');
         mapView.style.height = window.innerHeight + "px";
         mapView.style.width = window.innerWidth + "px";
-        const map = new window.google.maps.Map(mapView, {
+        var map = new window.google.maps.Map(mapView, {
             zoom: 16,
             center: {lat: 45.4640976, lng: 9.1919265},
             mapTypeControl: false
         });
         this.setState({map: map});
+
         const markers = [];
         this.state.pointsOfInterest.forEach((point) => {
             const marker = new window.google.maps.Marker({
@@ -84,6 +86,9 @@ class GoogleMap extends Component {
             markers.push(marker);
         })
         this.setState({markers: markers});
+        const bounds = new window.google.maps.LatLngBounds();
+        markers.forEach((m)=> bounds.extend(m.position))
+
     }
 
     /**
@@ -135,14 +140,12 @@ class GoogleMap extends Component {
         infoWindow.marker.setAnimation(window.google.maps.Animation.BOUNCE)
     }
 
-    closeInfoWindow = (marker) => {
-        this.state.infoWindow && this.state.infoWindow.close();
-        // this.setState((prevState) => {
-        //     const infoWindow = prevState.infoWindow;
-        //     if (infoWindow.marker === marker)
-        //         infoWindow.close();
-        //     return {infoWindow: infoWindow};
-        // })
+    closeInfoWindow = () => {
+        if(this.state.infoWindow) {
+            this.state.infoWindow.close();
+            if(this.state.infoWindow.marker)
+                this.state.infoWindow.marker.setAnimation(null);
+        }
     }
 
     /**
@@ -164,7 +167,7 @@ class GoogleMap extends Component {
 
     render() {
         return (
-            <div>
+            <div className="container">
                 <PointsOfInterestList list={this.state.markers} populateInfoWindow={this.populateInfoWindow}
                                       closeInfoWindow={this.closeInfoWindow}/>
                 <div id='map'/>
