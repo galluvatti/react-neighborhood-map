@@ -41,6 +41,7 @@ class PointsOfInterestList extends Component {
         return (
             <div className="search-box">
                 <input
+                    tabIndex={1}
                     type="text"
                     className="search-text"
                     placeholder="Search a location..."
@@ -50,8 +51,10 @@ class PointsOfInterestList extends Component {
                 <ul>
                     {showingPlaces.map((marker) => (
                         <li
+                            tabIndex={0}
                             key={marker.title}
                             onClick={() => populateInfoWindow(marker)}
+                            onKeyPress={() => populateInfoWindow(marker)}
                         >
                             {marker.title}
                         </li>

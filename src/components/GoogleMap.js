@@ -162,6 +162,9 @@ class GoogleMap extends Component {
         script.src = "https://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyCGekEiZ6lE1XN9rQrmIAqbnN-pF7xMX60&callback=loadMap";
         script.async = true;
         script.defer = true;
+        script.onerror = function () {
+            document.write("Sorry...There was an issue while loading Google Maps. Try later please.");
+        };
         document.body.appendChild(script);
     }
 
