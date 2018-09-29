@@ -42,7 +42,7 @@ class GoogleMap extends Component {
             ],
             markers: [],
             infoWindow: '',
-            map:''
+            map: ''
         }
 
         this.loadMap = this.loadMap.bind(this);
@@ -50,6 +50,15 @@ class GoogleMap extends Component {
         this.openInfoWindow = this.openInfoWindow.bind(this);
         this.closeInfoWindow = this.closeInfoWindow.bind(this);
     }
+
+
+    /**
+     * Handle some errors when loading google apis
+     */
+    gm_authFailure() {
+        const container = document.getElementById("root");
+        container.innerHTML = '<span>Sorry...There was an issue while loading Google Maps. Try later please.</span>';
+    };
 
     /**
      * Initializes the google map so that it fits the entire available space
@@ -87,7 +96,7 @@ class GoogleMap extends Component {
         })
         this.setState({markers: markers});
         const bounds = new window.google.maps.LatLngBounds();
-        markers.forEach((m)=> bounds.extend(m.position))
+        markers.forEach((m) => bounds.extend(m.position))
 
     }
 
@@ -141,9 +150,9 @@ class GoogleMap extends Component {
     }
 
     closeInfoWindow = () => {
-        if(this.state.infoWindow) {
+        if (this.state.infoWindow) {
             this.state.infoWindow.close();
-            if(this.state.infoWindow.marker)
+            if (this.state.infoWindow.marker)
                 this.state.infoWindow.marker.setAnimation(null);
         }
     }
@@ -158,8 +167,9 @@ class GoogleMap extends Component {
         window.populateInfoWindow = this.populateInfoWindow;
         window.openInfoWindow = this.openInfoWindow;
         window.closeInfoWindow = this.closeInfoWindow();
+        window.gm_authFailure = this.gm_authFailure;
         const script = document.createElement("script");
-        script.src = "https://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyCGekEiZ6lE1XN9rQrmIAqbnN-pF7xMX60&callback=loadMap";
+        script.src = "https://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyCGekEiZ6lE1XN9rQrmIAqbnN-pF7xMX6&callback=loadMap";
         script.async = true;
         script.defer = true;
         script.onerror = function () {
