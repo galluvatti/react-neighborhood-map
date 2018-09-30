@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import PointsOfInterestList from "./PointsOfInterestList.js";
 
-const clientId = "LWNZFPLXZW2GHQ1N1ZC5CTWTEJZZDR0JCTTQIBCAT2UIEBQS";
-const clientSecret = "4FZVE0ZCVFNDTE3ME5PHTFEQWU4PJRQC4UL0ONX5GQA2CVCQ";
+const clientId = "";
+const clientSecret = "";
 
 class GoogleMap extends Component {
 
@@ -169,7 +169,7 @@ class GoogleMap extends Component {
         window.closeInfoWindow = this.closeInfoWindow();
         window.gm_authFailure = this.gm_authFailure;
         const script = document.createElement("script");
-        script.src = "https://maps.googleapis.com/maps/api/js?v=3&key=AIzaSyCGekEiZ6lE1XN9rQrmIAqbnN-pF7xMX60&callback=loadMap";
+        script.src = "https://maps.googleapis.com/maps/api/js?v=3&key=&callback=loadMap";
         script.async = true;
         script.defer = true;
         script.onerror = function () {
